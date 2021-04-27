@@ -1,10 +1,66 @@
 %{
 
-
+extern int yylineno;
 %}
 
-%token VOID INT BYTE B BOOL AND OR NOT TRUE FALSE RETURN IF ELSE WHILE BREAK
+%token VOID INT BYTE B BOOL AND OR NOT TRUE FALSE RETURN IF ELSE WHILE BREAK CONTINUE SWITCH
+%token CASE DEFAULT COLON SC COMMA LPAREN RPAREN LBRACE RBRACE ASSIGN RELOP BINOP ID NUM STRING
 
 %%
+
+Program:    Funcs {}
+Funcs:      /*epsilon*/ {}
+            | FuncDecl Funcs {}
+FuncDecl:   RetType ID LAPREN Formals RPAREN LBRACE Statements RBRACE {}
+RetType:    Type {}
+            | VOID {}
+Formals:    /*epsilon*/ {}
+            | FormalsList {}
+FormalsList: FormalDecl {}
+             |FormalDecl COMMA FormalsList {}
+FormalDecl:   Type ID {}
+Statements: Statement{}
+            |Statements Statement {}
+Statment:   LBRACE Statements RBRACE {}
+            | Type ID SC {}
+            | Type ID ASSIGN Exp SC {}
+            | ID ASSIGN Exp SC {}
+            | Call SC {}
+            | RETURN SC
+            | RETURN Exp SC {}
+            | IF LPAREN Exp RPAREN Statement {}
+            | IF LPAREN Exp RPAREN Statement ELSE Statement {}
+            | WHILE LPAREN Exp RPAREN Statement {}
+            | BREAK SC {}
+            | CONTINUE SC {}
+            | SWITCH LPAREN Exp RPAREN LBRACE CaseList RBRACE {}
+Call:       ID LPAREN ExpList RPAREN {}
+            | ID LPAREN RPAREN {}
+ExpList:    Exp {}
+            | Exp COMMA ExpList {}
+Type:       INT {}
+            | BYTE {}
+            | BOOL
+Exp:        LPAREN Exp RPARE {}
+            | Exp BINOP Exp {}
+            | ID {}
+            | Call {}
+            | NUM {}
+            | NUM B {}
+            | STRING {}
+            | TRUE {}
+            | FALSE {}
+            | NOT Exp {}
+            | Exp AND Exp {}
+            | Exp OR Exp {}
+            | Exp RELOP Exp {}
+            | LPAREN Type RPAREN Exp {}
+CaseList:   CaseDecl CaseList {}
+            | CaseDecl {}
+            | DEFAULT COLON Statments {}
+            | CASE NUM COLON Statements {}
+
+
+
 
 %%

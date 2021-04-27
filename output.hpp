@@ -1,6 +1,6 @@
 #ifndef _236360_2_
 #define _236360_2_
-#include
+#include <string>
 using namespace std;
 namespace output
 {
