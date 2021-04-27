@@ -41,7 +41,7 @@ default {yylval = new Default(yytext) return DEFAULT;}
 [a-zA-Z][a-zA-Z0-9]* {yylval = new Id(yytext) return ID;}
 "([^\n\r\"\\]|\\[rnt"\\])+" {yylval = new String(yytext) return STRING;}
 {WS} { /* ignore */ }
-. {return -1; /* error */ }
+. {errorLex(yylineno); /* error */ }
 
 %%
 
