@@ -1,0 +1,10 @@
+%{
+
+
+%}
+
+%token VOID INT BYTE B BOOL AND OR NOT TRUE FALSE RETURN IF ELSE WHILE BREAK
+
+%%
+
+%%
