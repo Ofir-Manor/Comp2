@@ -6,31 +6,61 @@ void yyerror(const char* message);
 using namespace output;
 %}
 
-%token VOID INT BYTE B BOOL AND OR NOT TRUE FALSE RETURN IF ELSE WHILE BREAK CONTINUE SWITCH
-%token CASE DEFAULT COLON SC COMMA LPAREN RPAREN LBRACE RBRACE ASSIGN RELOP BINOP ID NUM STRING
+%token VOID
+%token INT
+%token BYTE
+%token B
+%token BOOL
+%nonassoc AND
+%nonassoc OR
+%right NOT
+%token TRUE
+%token FALSE
+%token RETURN
+%token IF
+%token ELSE
+%token WHILE
+%token BREAK
+%token CONTINUE
+%token SWITCH
+%token CASE
+%token DEFAULT
+%token COLON
+%left SC
+%right COMMA
+%right LPAREN
+%right RPAREN
+%right LBRACE
+%right RBRACE
+%token ID
+%token NUM
+%token STRING
+%right ASSIGN
+%nonassoc RELOP
+%left BINOP
 
 %%
 
-Program:    Funcs {printProductionRule(1);}
+Program:     Funcs {printProductionRule(1);}
 ;
-Funcs:      /*epsilon*/ {printProductionRule(2);}
-            | FuncDecl Funcs {printProductionRule(3);}
+Funcs:       FuncDecl Funcs {printProductionRule(3);}
+             | /*epsilon*/ {printProductionRule(2);}
 ;
-FuncDecl:   RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE {printProductionRule(4);}
+FuncDecl:    RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE {printProductionRule(4);}
 ;
-RetType:    Type {printProductionRule(5);}
-            | VOID {printProductionRule(6);}
+RetType:     Type {printProductionRule(5);}
+             | VOID {printProductionRule(6);}
 ;
-Formals:    /*epsilon*/ {printProductionRule(7);}
-            | FormalsList {printProductionRule(8);}
+Formals:     FormalsList {printProductionRule(8);}
+             | /*epsilon*/ {printProductionRule(7);}
 ;
-FormalsList: FormalDecl {printProductionRule(9);}
-             |FormalDecl COMMA FormalsList {printProductionRule(10);}
+FormalsList: FormalDecl COMMA FormalsList {printProductionRule(10);}
+             | FormalDecl {printProductionRule(9);}
 ;
 FormalDecl:  Type ID {printProductionRule(11);}
 ;
-Statements: Statement{printProductionRule(12);}
-            |Statements Statement {printProductionRule(13);}
+Statements:  Statements Statement {printProductionRule(13);}
+            | Statement{printProductionRule(12);}
 ;
 Statement:  LBRACE Statements RBRACE {printProductionRule(14);}
             | Type ID SC {printProductionRule(15);}
@@ -49,8 +79,8 @@ Statement:  LBRACE Statements RBRACE {printProductionRule(14);}
 Call:       ID LPAREN ExpList RPAREN {printProductionRule(27);}
             | ID LPAREN RPAREN {printProductionRule(28);}
 ;
-ExpList:    Exp {printProductionRule(29);}
-            | Exp COMMA ExpList {printProductionRule(30);}
+ExpList:    Exp COMMA ExpList {printProductionRule(30);}
+            | Exp {printProductionRule(29);}
 ;
 Type:       INT {printProductionRule(31);}
             | BYTE {printProductionRule(32);}
@@ -60,8 +90,8 @@ Exp:        LPAREN Exp RPAREN {printProductionRule(34);}
             | Exp BINOP Exp {printProductionRule(35);}
             | ID {printProductionRule(36);}
             | Call {printProductionRule(37);}
-            | NUM {printProductionRule(38);}
             | NUM B {printProductionRule(39);}
+            | NUM {printProductionRule(38);}
             | STRING {printProductionRule(40);}
             | TRUE {printProductionRule(41);}
             | FALSE {printProductionRule(42);}
