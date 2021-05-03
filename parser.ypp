@@ -18,7 +18,7 @@ using namespace output;
 %token FALSE
 %token RETURN
 %token IF
-%token ELSE
+
 %token WHILE
 %token BREAK
 %token CONTINUE
@@ -38,6 +38,7 @@ using namespace output;
 %right ASSIGN
 %nonassoc RELOP
 %left BINOP
+%left ELSE
 
 %%
 
@@ -69,8 +70,8 @@ Statement:  LBRACE Statements RBRACE {printProductionRule(14);}
             | Call SC {printProductionRule(18);}
             | RETURN SC {printProductionRule(19);}
             | RETURN Exp SC {printProductionRule(20);}
+            | IF LPAREN Exp RPAREN Statement ELSE Statement {printProductionRule(22);} 
             | IF LPAREN Exp RPAREN Statement {printProductionRule(21);}
-            | IF LPAREN Exp RPAREN Statement ELSE Statement {printProductionRule(22);}
             | WHILE LPAREN Exp RPAREN Statement {printProductionRule(23);}
             | BREAK SC {printProductionRule(24);}
             | CONTINUE SC {printProductionRule(25);}
