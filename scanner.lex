@@ -7,6 +7,8 @@ using namespace output;
 %option yylineno
 %option noyywrap
 WS ([ \t\r\n])
+relop (<|>|<=|>=)
+eqop (==|!=)
 
 %%
 
@@ -37,13 +39,15 @@ default {return DEFAULT;}
 \{ {return LBRACE;}
 \} {return RBRACE;}
 = {return ASSIGN;}
-[(==)|(!=)|(<)|(>)|(<=)|(>=)] {return RELOP;}
-[\+|\-|\*|/] {return BINOP;}
+{relop} {return RELOP;}
+{eqop} {return EQOP;}
+[\+|\-] {return ADDSUB;}
+[\*|/] {return MULDIV;}
 0|[1-9][0-9]* {return NUM;}
 [a-zA-Z][a-zA-Z0-9]* {return ID;}
 \"([^\n\r\"\\]|\\[rnt"\\])+\" {return STRING;}
 (\/\/[^\r\n]*(\r|\n|\r\n)?) {/*ignore*/}
 {WS} { /* ignore */ }
-. {errorLex(yylineno);}
+. {errorLex(yylineno); exit(0);}
 
 %%

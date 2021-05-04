@@ -11,14 +11,12 @@ using namespace output;
 %token BYTE
 %token B
 %token BOOL
-%nonassoc AND
 %nonassoc OR
-%right NOT
+%nonassoc AND
 %token TRUE
 %token FALSE
 %token RETURN
 %token IF
-
 %token WHILE
 %token BREAK
 %token CONTINUE
@@ -33,11 +31,14 @@ using namespace output;
 %right LBRACE
 %right RBRACE
 %token ID
-%token NUM
+%left ADDSUB
+%left MULDIV
+%nonassoc NUM
 %token STRING
 %right ASSIGN
-%nonassoc RELOP
-%left BINOP
+%left EQOP
+%left RELOP
+%right NOT
 %left ELSE
 
 %%
@@ -88,11 +89,12 @@ Type:       INT {printProductionRule(31);}
             | BOOL {printProductionRule(33);}
 ;
 Exp:        LPAREN Exp RPAREN {printProductionRule(34);}
-            | Exp BINOP Exp {printProductionRule(35);}
             | ID {printProductionRule(36);}
             | Call {printProductionRule(37);}
             | NUM B {printProductionRule(39);}
             | NUM {printProductionRule(38);}
+			| Exp MULDIV Exp {printProductionRule(35);}
+			| Exp ADDSUB Exp {printProductionRule(35);}
             | STRING {printProductionRule(40);}
             | TRUE {printProductionRule(41);}
             | FALSE {printProductionRule(42);}
@@ -100,6 +102,7 @@ Exp:        LPAREN Exp RPAREN {printProductionRule(34);}
             | Exp AND Exp {printProductionRule(44);}
             | Exp OR Exp {printProductionRule(45);}
             | Exp RELOP Exp {printProductionRule(46);}
+			| Exp EQOP Exp {printProductionRule(46);}
             | LPAREN Type RPAREN Exp {printProductionRule(47);}
 ;
 CaseList:   CaseDecl CaseList {printProductionRule(48);}
